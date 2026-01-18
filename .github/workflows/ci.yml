@@ -78,7 +78,7 @@ jobs:
           fi
 
           echo "Formatting changes pushed. Re-run will start on the new commit."
-          exit 1
+          exit 0
 
       - name: Fail if formatting changed (fork PRs)
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == true }}
