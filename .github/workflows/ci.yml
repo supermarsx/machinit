@@ -30,19 +30,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          SHFMT_VERSION="3.8.1"
-          ARCH="linux_amd64"
-          CANDIDATES=(
-            "https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_v${SHFMT_VERSION}_${ARCH}"
-            "https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_${SHFMT_VERSION}_${ARCH}"
-          )
-          for URL in "${CANDIDATES[@]}"; do
-            echo "Trying shfmt from: $URL"
-            if curl -fsSL -o /tmp/shfmt "$URL"; then
-              break
-            fi
-          done
-          test -s /tmp/shfmt
+          URL="https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64"
+          echo "Downloading shfmt from: $URL"
+          curl -fsSL -o /tmp/shfmt "$URL"
           sudo install -m 0755 /tmp/shfmt /usr/local/bin/shfmt
           shfmt --version
 
@@ -157,19 +147,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          SHFMT_VERSION="3.8.1"
-          ARCH="linux_amd64"
-          CANDIDATES=(
-            "https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_v${SHFMT_VERSION}_${ARCH}"
-            "https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_${SHFMT_VERSION}_${ARCH}"
-          )
-          for URL in "${CANDIDATES[@]}"; do
-            echo "Trying shfmt from: $URL"
-            if curl -fsSL -o /tmp/shfmt "$URL"; then
-              break
-            fi
-          done
-          test -s /tmp/shfmt
+          URL="https://github.com/mvdan/sh/releases/download/v3.12.0/shfmt_v3.12.0_linux_amd64"
+          echo "Downloading shfmt from: $URL"
+          curl -fsSL -o /tmp/shfmt "$URL"
           sudo install -m 0755 /tmp/shfmt /usr/local/bin/shfmt
           shfmt --version
 
