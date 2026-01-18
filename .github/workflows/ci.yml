@@ -55,8 +55,8 @@ jobs:
           find . -name "*.sh" -not -path "*/node_modules/*" -print0 | xargs -0 shfmt -w -i 4 -ci
           python -m black .
 
-      - name: Auto-commit formatting changes (PRs from same repo)
-        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false }}
+      - name: Auto-commit formatting changes (push or same-repo PRs)
+        if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false) }}
         shell: bash
         run: |
           set -euo pipefail
@@ -80,7 +80,8 @@ jobs:
           echo "Formatting changes pushed. Re-run will start on the new commit."
           exit 1
 
-      - name: Fail if formatting changed (non-pushable contexts)
+      - name: Fail if formatting changed (fork PRs)
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == true }}
         shell: bash
         run: |
           set -euo pipefail
