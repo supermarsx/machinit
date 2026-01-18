@@ -8,8 +8,8 @@ echo "Testing Finder script prints pre-clear and post-add lists (dry-run)..."
 
 OUT=$(DRY_RUN=true "$SCRIPT" 2>&1 || true)
 
-if echo "$OUT" | grep -q "Current Finder sidebar items (pre-clear):" && \
-   echo "$OUT" | grep -q "Final Finder sidebar items (post-add):"; then
+if echo "$OUT" | grep -q "Current Finder sidebar items (pre-clear):" &&
+    echo "$OUT" | grep -q "Final Finder sidebar items (post-add):"; then
     echo "PASS: script printed both pre-clear and post-add lists"
     exit 0
 else

@@ -7,7 +7,7 @@ echo "Testing finder_sidebar_editor.FinderSidebar.add in DRY_RUN mode (should be
 OUT=$(DRY_RUN=1 python3 -c 'from finder_sidebar_editor import FinderSidebar; FinderSidebar().add("/tmp")' 2>&1 || true)
 
 if echo "$OUT" | grep -q "DRY_RUN" || echo "$OUT" | grep -q "[DRY_RUN]"; then
-    echo "PASS: FinderSidebar.add respected DRY_RUN" 
+    echo "PASS: FinderSidebar.add respected DRY_RUN"
     exit 0
 else
     # In some environments the module may silence output, but it must not raise

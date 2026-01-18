@@ -7,7 +7,7 @@ STATE_FILE="$TMPDIR/state.txt"
 ATTEMPTS_FILE="$TMPDIR/attempts.txt"
 FAKE_MYSIDES="$TMPDIR/mysides"
 
-cat > "$FAKE_MYSIDES" <<'EOF'
+cat >"$FAKE_MYSIDES" <<'EOF'
 #!/bin/bash
 STATE_FILE=${MYSIDES_STATE:-/tmp/machinit_mysides_state}
 ATTEMPTS_FILE=${MYSIDES_MOV_ATTEMPTS:-/tmp/machinit_mysides_move_attempts}
@@ -70,12 +70,12 @@ OUT=$(python3 scripts/lib/finder_sidebar_editor.py move Projects 2 2>&1 || true)
 RC=$?
 
 if [ $RC -eq 0 ] || echo "$OUT" | grep -q "Moved"; then
-  echo "PASS: move retried and eventually succeeded (or returned success)"
-  rm -rf "$TMPDIR"
-  exit 0
+    echo "PASS: move retried and eventually succeeded (or returned success)"
+    rm -rf "$TMPDIR"
+    exit 0
 else
-  echo "FAIL: move did not succeed after retries" >&2
-  echo "$OUT" >&2
-  rm -rf "$TMPDIR"
-  exit 1
+    echo "FAIL: move did not succeed after retries" >&2
+    echo "$OUT" >&2
+    rm -rf "$TMPDIR"
+    exit 1
 fi

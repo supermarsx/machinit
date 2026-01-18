@@ -14,8 +14,7 @@ class TestConfigParser(unittest.TestCase):
             os.path.dirname(__file__), "../scripts/lib/config_parser.py"
         )
         self.test_toml = tempfile.NamedTemporaryFile(mode="w+", delete=False)
-        self.test_toml.write(
-            """
+        self.test_toml.write("""
 [section]
 key = "value"
 number = 123
@@ -25,8 +24,7 @@ bool_false = false
 [scripts]
 "001_script.sh" = true
 "002_script.sh" = false
-"""
-        )
+""")
         self.test_toml.close()
 
     def tearDown(self):

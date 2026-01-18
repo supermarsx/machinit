@@ -39,7 +39,7 @@ while [[ $# -gt 0 ]]; do
             FSE_SYNC=true
             shift
             ;;
-        --fse-bg|--fse-background)
+        --fse-bg | --fse-background)
             FSE_SYNC=false
             shift
             ;;
@@ -214,7 +214,7 @@ run_fse_cmd() {
             # automation or mysides is temporarily unavailable.
             local attempt=0
             local rc=1
-            while : ; do
+            while :; do
                 execute_as_user sh -c "$cmd"
                 rc=$?
                 if [ "$rc" -eq 0 ]; then
@@ -230,7 +230,7 @@ run_fse_cmd() {
             done
         fi
         # give the UI time to settle
-            if [ "$DRY_RUN" = true ]; then
+        if [ "$DRY_RUN" = true ]; then
             print_info "(DRY_RUN) Sleeping ${FSE_WAIT_SECONDS}s between FSE actions"
         else
             sleep ${FSE_WAIT_SECONDS}
@@ -274,7 +274,7 @@ add_sidebar_item() {
 
     # Normalize request flag into a simple boolean value (0/1)
     case "${USE_MYSIDES:-}" in
-        1|true|True|TRUE|yes|Yes|YES)
+        1 | true | True | TRUE | yes | Yes | YES)
             USE_MYSIDES_FLAG=1
             ;;
         *)
@@ -283,7 +283,7 @@ add_sidebar_item() {
     esac
 
     case "${USE_PYOBJC:-}" in
-        1|true|True|TRUE|yes|Yes|YES)
+        1 | true | True | TRUE | yes | Yes | YES)
             USE_PYOBJC_FLAG=1
             ;;
         *)
@@ -583,15 +583,15 @@ if [ "$ADD_SIDEBAR_ONLY" = true ]; then
     print_info "Closing any open Finder windows after sidebar operations (best-effort)..."
     execute_as_user /usr/bin/osascript -e 'tell application "Finder" to close every window' &>/dev/null || true
     sleep 0.25
-        # Print final list so callers can verify what was added in add-only mode
-        if command -v python3 >/dev/null 2>&1; then
-            print_info "Final Finder sidebar items (post-add, add-only mode):"
-            if [ "${USE_PYOBJC_FLAG:-0}" -eq 1 ]; then
-                execute_as_user env PYTHONPATH="${libpath}" MACHINIT_USE_PYOBJC=1 python3 -c "from finder_sidebar_editor import FinderSidebar; import sys; print('\n'.join(FinderSidebar().list()))" 2>/dev/null || true
-            else
-                execute_as_user env PYTHONPATH="${libpath}" python3 -c "from finder_sidebar_editor import FinderSidebar; import sys; print('\n'.join(FinderSidebar().list()))" 2>/dev/null || true
-            fi
+    # Print final list so callers can verify what was added in add-only mode
+    if command -v python3 >/dev/null 2>&1; then
+        print_info "Final Finder sidebar items (post-add, add-only mode):"
+        if [ "${USE_PYOBJC_FLAG:-0}" -eq 1 ]; then
+            execute_as_user env PYTHONPATH="${libpath}" MACHINIT_USE_PYOBJC=1 python3 -c "from finder_sidebar_editor import FinderSidebar; import sys; print('\n'.join(FinderSidebar().list()))" 2>/dev/null || true
+        else
+            execute_as_user env PYTHONPATH="${libpath}" python3 -c "from finder_sidebar_editor import FinderSidebar; import sys; print('\n'.join(FinderSidebar().list()))" 2>/dev/null || true
         fi
+    fi
     exit 0
 fi
 

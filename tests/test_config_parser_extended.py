@@ -16,8 +16,7 @@ PARSER_SCRIPT = os.path.join(PROJECT_ROOT, "scripts", "lib", "config_parser.py")
 class TestConfigParserExtended(unittest.TestCase):
     def setUp(self):
         self.test_toml = tempfile.NamedTemporaryFile(mode="w+", delete=False)
-        self.test_toml.write(
-            """
+        self.test_toml.write("""
 [section]
 key = "value"
 nested.key = "nested_value"
@@ -34,8 +33,7 @@ empty_list = []
 [deep.level2]
 [deep.level2.level3]
 val = "deep_value"
-"""
-        )
+""")
         self.test_toml.close()
 
     def tearDown(self):

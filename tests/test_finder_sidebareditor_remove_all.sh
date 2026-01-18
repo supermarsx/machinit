@@ -6,7 +6,7 @@ TMPDIR=$(mktemp -d /tmp/machinit_test_mysides.XXXXXX)
 STATE_FILE="$TMPDIR/state.txt"
 FAKE_MYSIDES="$TMPDIR/mysides"
 
-cat > "$FAKE_MYSIDES" <<'EOF'
+cat >"$FAKE_MYSIDES" <<'EOF'
 #!/bin/bash
 # Minimal fake mysides script for tests
 STATE_FILE=${MYSIDES_STATE:-/tmp/machinit_mysides_state}
@@ -54,9 +54,9 @@ python3 scripts/lib/finder_sidebar_editor.py add "$TMPDIR/target2" --name Two
 
 OUT=$(python3 scripts/lib/finder_sidebar_editor.py list)
 if ! echo "$OUT" | grep -q "One" || ! echo "$OUT" | grep -q "Two"; then
-  echo "FAIL: setup failed, list output missing" >&2
-  echo "$OUT" >&2
-  exit 1
+    echo "FAIL: setup failed, list output missing" >&2
+    echo "$OUT" >&2
+    exit 1
 fi
 
 # Remove all
@@ -64,12 +64,12 @@ python3 scripts/lib/finder_sidebar_editor.py remove-all
 
 OUT2=$(python3 scripts/lib/finder_sidebar_editor.py list)
 if [ -z "${OUT2//[[:space:]]/}" ]; then
-  echo "PASS: remove-all removed everything"
-  rm -rf "$TMPDIR"
-  exit 0
+    echo "PASS: remove-all removed everything"
+    rm -rf "$TMPDIR"
+    exit 0
 else
-  echo "FAIL: remove-all did not remove everything" >&2
-  echo "$OUT2" >&2
-  rm -rf "$TMPDIR"
-  exit 1
+    echo "FAIL: remove-all did not remove everything" >&2
+    echo "$OUT2" >&2
+    rm -rf "$TMPDIR"
+    exit 1
 fi

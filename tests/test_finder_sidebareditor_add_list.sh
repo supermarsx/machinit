@@ -6,7 +6,7 @@ TMPDIR=$(mktemp -d /tmp/machinit_test_mysides.XXXXXX)
 STATE_FILE="$TMPDIR/state.txt"
 FAKE_MYSIDES="$TMPDIR/mysides"
 
-cat > "$FAKE_MYSIDES" <<'EOF'
+cat >"$FAKE_MYSIDES" <<'EOF'
 #!/bin/bash
 # Minimal fake mysides script for tests
 # STATE_FILE points to the backing file
@@ -63,11 +63,11 @@ python3 scripts/lib/finder_sidebar_editor.py add "$TMPDIR/target2" --name Docume
 OUT=$(python3 scripts/lib/finder_sidebar_editor.py list)
 
 if echo "$OUT" | grep -q "Projects" && echo "$OUT" | grep -q "Documents"; then
-  echo "PASS: list shows added items"
+    echo "PASS: list shows added items"
 else
-  echo "FAIL: list output unexpected:" >&2
-  echo "$OUT" >&2
-  exit 1
+    echo "FAIL: list output unexpected:" >&2
+    echo "$OUT" >&2
+    exit 1
 fi
 
 # Now try removal
@@ -78,12 +78,12 @@ OUT2=$(python3 scripts/lib/finder_sidebarditor.py list 2>/dev/null || true)
 OUT2=$(python3 scripts/lib/finder_sidebar_editor.py list)
 
 if echo "$OUT2" | grep -q "Documents" && ! echo "$OUT2" | grep -q "Projects"; then
-  echo "PASS: remove removed Projects; Documents still present"
-  rm -rf "$TMPDIR"
-  exit 0
+    echo "PASS: remove removed Projects; Documents still present"
+    rm -rf "$TMPDIR"
+    exit 0
 else
-  echo "FAIL: remove did not work as expected:" >&2
-  echo "$OUT2" >&2
-  rm -rf "$TMPDIR"
-  exit 1
+    echo "FAIL: remove did not work as expected:" >&2
+    echo "$OUT2" >&2
+    rm -rf "$TMPDIR"
+    exit 1
 fi
