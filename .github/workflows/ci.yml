@@ -196,7 +196,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          UNFORMATTED=$(find . -name "*.sh" -not -path "*/node_modules/*" -print0 | xargs -0 shfmt -l || true)
+          UNFORMATTED=$(find . -name "*.sh" -not -path "*/node_modules/*" -print0 | xargs -0 shfmt -l -i 4 -ci || true)
           if [ -n "$UNFORMATTED" ]; then
             echo "The following shell files need shfmt formatting:" >&2
             echo "$UNFORMATTED" >&2
