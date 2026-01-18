@@ -6,7 +6,7 @@ TMPDIR=$(mktemp -d /tmp/machinit_test_mysides.XXXXXX)
 STATE_FILE="$TMPDIR/state.txt"
 FAKE_MYSIDES="$TMPDIR/mysides"
 
-cat > "$FAKE_MYSIDES" <<'EOF'
+cat >"$FAKE_MYSIDES" <<'EOF'
 #!/bin/bash
 # Fake mysides that returns success for remove but doesn't modify state
 STATE_FILE=${MYSIDES_STATE:-/tmp/machinit_mysides_state}
@@ -51,11 +51,11 @@ python3 scripts/lib/finder_sidebar_editor.py add "$TMPDIR/target1" --name Projec
 
 # try to remove — should fail because mysides does nothing (though returns 0)
 if python3 scripts/lib/finder_sidebar_editor.py remove Projects; then
-  echo "FAIL: remove should have failed because mysides no-op" >&2
-  rm -rf "$TMPDIR"
-  exit 1
+    echo "FAIL: remove should have failed because mysides no-op" >&2
+    rm -rf "$TMPDIR"
+    exit 1
 else
-  echo "PASS: remove failed as expected when mysides returned success but did not remove"
+    echo "PASS: remove failed as expected when mysides returned success but did not remove"
 fi
 
 rm -rf "$TMPDIR"

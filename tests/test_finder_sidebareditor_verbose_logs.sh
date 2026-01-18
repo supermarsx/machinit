@@ -6,7 +6,7 @@ TMPDIR=$(mktemp -d /tmp/machinit_test_mysides.XXXXXX)
 STATE_FILE="$TMPDIR/state.txt"
 FAKE_MYSIDES="$TMPDIR/mysides"
 
-cat > "$FAKE_MYSIDES" <<'EOF'
+cat >"$FAKE_MYSIDES" <<'EOF'
 #!/bin/bash
 # Minimal fake mysides script for tests
 STATE_FILE=${MYSIDES_STATE:-/tmp/machinit_mysides_state}
@@ -56,23 +56,23 @@ mkdir -p "$TMPDIR/target2"
 # Add an entry
 ERR=$(python3 scripts/lib/finder_sidebar_editor.py add "$TMPDIR/target1" --name Projects 2>&1 >/dev/null || true)
 if echo "$ERR" | grep -q "FSE DEBUG"; then
-  echo "PASS: debug info printed for add"
+    echo "PASS: debug info printed for add"
 else
-  echo "FAIL: expected debug output for add" >&2
-  echo "$ERR" >&2
-  rm -rf "$TMPDIR"
-  exit 1
+    echo "FAIL: expected debug output for add" >&2
+    echo "$ERR" >&2
+    rm -rf "$TMPDIR"
+    exit 1
 fi
 
 # Remove entry
 ERR2=$(python3 scripts/lib/finder_sidebar_editor.py remove Projects 2>&1 >/dev/null || true)
 if echo "$ERR2" | grep -q "FSE DEBUG"; then
-  echo "PASS: debug info printed for remove"
+    echo "PASS: debug info printed for remove"
 else
-  echo "FAIL: expected debug output for remove" >&2
-  echo "$ERR2" >&2
-  rm -rf "$TMPDIR"
-  exit 1
+    echo "FAIL: expected debug output for remove" >&2
+    echo "$ERR2" >&2
+    rm -rf "$TMPDIR"
+    exit 1
 fi
 
 rm -rf "$TMPDIR"

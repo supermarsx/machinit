@@ -10,6 +10,7 @@ Saves downloads to assets/completions/_name if found and not already present.
 Usage: ./dev_scripts/fetch_completions.py [name [name ...]]
 If no names are supplied, it tries a built-in list.
 """
+
 import sys
 import subprocess
 import shutil

@@ -10,11 +10,11 @@ echo "Testing Finder FSE synchronous mode (dry-run)..."
 OUT_DEFAULT=$(DRY_RUN=true "$SCRIPT" --add-sidebar-only 2>&1 || true)
 OUT_FLAG=$(DRY_RUN=true "$SCRIPT" --add-sidebar-only --fse-sync 2>&1 || true)
 
-if echo "$OUT_DEFAULT" | grep -q "Running FSE command synchronously" && \
-    echo "$OUT_DEFAULT" | grep -q "FSE sync mode — reusing Finder window" && \
-    echo "$OUT_DEFAULT" | grep -q "Adding 'Recents' to Finder sidebar" && \
-    echo "$OUT_DEFAULT" | grep -q "Sleeping 2.5s" && \
-    echo "$OUT_FLAG" | grep -q "Running FSE command synchronously" && \
+if echo "$OUT_DEFAULT" | grep -q "Running FSE command synchronously" &&
+    echo "$OUT_DEFAULT" | grep -q "FSE sync mode — reusing Finder window" &&
+    echo "$OUT_DEFAULT" | grep -q "Adding 'Recents' to Finder sidebar" &&
+    echo "$OUT_DEFAULT" | grep -q "Sleeping 2.5s" &&
+    echo "$OUT_FLAG" | grep -q "Running FSE command synchronously" &&
     echo "$OUT_FLAG" | grep -q "Sleeping 2.5s"; then
     echo "PASS: FSE synchronous mode outputs expected diagnostic lines"
     exit 0

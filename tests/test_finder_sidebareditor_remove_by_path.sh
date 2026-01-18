@@ -6,7 +6,7 @@ TMPDIR=$(mktemp -d /tmp/machinit_test_mysides.XXXXXX)
 STATE_FILE="$TMPDIR/state.txt"
 FAKE_MYSIDES="$TMPDIR/mysides"
 
-cat > "$FAKE_MYSIDES" <<'EOF'
+cat >"$FAKE_MYSIDES" <<'EOF'
 #!/bin/bash
 # Minimal fake mysides script for tests
 STATE_FILE=${MYSIDES_STATE:-/tmp/machinit_mysides_state}
@@ -61,12 +61,12 @@ python3 scripts/lib/finder_sidebar_editor.py remove-by-path "$TMPDIR/target1"
 OUT=$(python3 scripts/lib/finder_sidebar_editor.py list)
 
 if echo "$OUT" | grep -q "Documents" && ! echo "$OUT" | grep -q "Projects"; then
-  echo "PASS: remove-by-path removed the target path entry"
-  rm -rf "$TMPDIR"
-  exit 0
+    echo "PASS: remove-by-path removed the target path entry"
+    rm -rf "$TMPDIR"
+    exit 0
 else
-  echo "FAIL: remove-by-path did not remove expected entry" >&2
-  echo "$OUT" >&2
-  rm -rf "$TMPDIR"
-  exit 1
+    echo "FAIL: remove-by-path did not remove expected entry" >&2
+    echo "$OUT" >&2
+    rm -rf "$TMPDIR"
+    exit 1
 fi

@@ -4,6 +4,7 @@
 This script writes docs/inventory.md and intentionally considers functions only
 from assets/.functions so interactive helpers remain dotfile-owned.
 """
+
 from pathlib import Path
 import re
 
