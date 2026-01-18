@@ -3,7 +3,7 @@
 <br>
 <br>
 
-[![CI](https://img.shields.io/github/actions/workflow/status/supermarsx/machinit/.github/workflows/test-suite.yml?branch=main&style=flat-square)](https://github.com/supermarsx/machinit/actions/workflows/test-suite.yml)
+[![CI](https://img.shields.io/github/actions/workflow/status/supermarsx/machinit/.github/workflows/ci.yml?branch=main&style=flat-square)](https://github.com/supermarsx/machinit/actions/workflows/ci.yml)
 [![GitHub stars](https://img.shields.io/github/stars/supermarsx/machinit?style=flat-square)](https://github.com/supermarsx/machinit/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/supermarsx/machinit?style=flat-square)](https://github.com/supermarsx/machinit/network/members)
 [![GitHub watchers](https://img.shields.io/github/watchers/supermarsx/machinit?style=flat-square)](https://github.com/supermarsx/machinit/watchers)
