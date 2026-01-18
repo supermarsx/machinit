@@ -18,8 +18,6 @@ jobs:
   apply-format:
     name: Apply Formatting
     runs-on: ubuntu-latest
-    outputs:
-      changes_pushed: ${{ steps.format_status.outputs.changes_pushed }}
 
     steps:
       - name: Checkout
@@ -63,17 +61,6 @@ jobs:
           set -euo pipefail
           python ./dev_scripts/generate_inventory.py
 
-      - name: Detect formatting changes
-        id: format_status
-        shell: bash
-        run: |
-          set -euo pipefail
-          if git diff --quiet; then
-            echo "changes_pushed=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "changes_pushed=true" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Auto-commit formatting changes (push or same-repo PRs)
         if: ${{ (github.event_name == 'push' || github.event_name == 'workflow_dispatch') || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false) }}
         shell: bash
@@ -113,15 +100,28 @@ jobs:
           git --no-pager diff --name-only >&2
           exit 1
 
+      - name: Upload formatted workspace
+        uses: actions/upload-artifact@v4
+        with:
+          name: formatted-worktree
+          path: |
+            .
+            !.git/**
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
     needs: [apply-format]
-    if: ${{ needs.apply-format.outputs.changes_pushed != 'true' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Download formatted workspace
+        uses: actions/download-artifact@v4
+        with:
+          name: formatted-worktree
+          path: .
 
       - name: Install ShellCheck
         shell: bash
@@ -159,11 +159,16 @@ jobs:
     name: Format Check
     runs-on: ubuntu-latest
     needs: [apply-format]
-    if: ${{ needs.apply-format.outputs.changes_pushed != 'true' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Download formatted workspace
+        uses: actions/download-artifact@v4
+        with:
+          name: formatted-worktree
+          path: .
 
       - name: Install shfmt (pinned)
         shell: bash
@@ -208,11 +213,16 @@ jobs:
     name: Text Check
     runs-on: ubuntu-latest
     needs: [apply-format]
-    if: ${{ needs.apply-format.outputs.changes_pushed != 'true' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Download formatted workspace
+        uses: actions/download-artifact@v4
+        with:
+          name: formatted-worktree
+          path: .
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -230,11 +240,16 @@ jobs:
     name: Test (macOS dry-run)
     runs-on: macos-latest
     needs: [apply-format, lint, format-check, text-check]
-    if: ${{ needs.apply-format.outputs.changes_pushed != 'true' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Download formatted workspace
+        uses: actions/download-artifact@v4
+        with:
+          name: formatted-worktree
+          path: .
 
       - name: Run install script in dry-run mode
         shell: bash
@@ -255,11 +270,16 @@ jobs:
     name: Test (macOS full suite)
     runs-on: macos-latest
     needs: [apply-format, lint, format-check, text-check]
-    if: ${{ needs.apply-format.outputs.changes_pushed != 'true' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Download formatted workspace
+        uses: actions/download-artifact@v4
+        with:
+          name: formatted-worktree
+          path: .
 
       - name: Run full test suite
         shell: bash
