@@ -26,17 +26,24 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.22.x'
-
       - name: Install shfmt (pinned)
         shell: bash
         run: |
           set -euo pipefail
-          echo "$HOME/go/bin" >> "$GITHUB_PATH"
-          go install mvdan.cc/sh/v3/cmd/shfmt@v3.8.1
+          SHFMT_VERSION="3.8.1"
+          ARCH="linux_amd64"
+          CANDIDATES=(
+            "https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_v${SHFMT_VERSION}_${ARCH}"
+            "https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_${SHFMT_VERSION}_${ARCH}"
+          )
+          for URL in "${CANDIDATES[@]}"; do
+            echo "Trying shfmt from: $URL"
+            if curl -fsSL -o /tmp/shfmt "$URL"; then
+              break
+            fi
+          done
+          test -s /tmp/shfmt
+          sudo install -m 0755 /tmp/shfmt /usr/local/bin/shfmt
           shfmt --version
 
       - name: Set up Python
@@ -146,17 +153,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.22.x'
-
       - name: Install shfmt (pinned)
         shell: bash
         run: |
           set -euo pipefail
-          echo "$HOME/go/bin" >> "$GITHUB_PATH"
-          go install mvdan.cc/sh/v3/cmd/shfmt@v3.8.1
+          SHFMT_VERSION="3.8.1"
+          ARCH="linux_amd64"
+          CANDIDATES=(
+            "https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_v${SHFMT_VERSION}_${ARCH}"
+            "https://github.com/mvdan/sh/releases/download/v${SHFMT_VERSION}/shfmt_${SHFMT_VERSION}_${ARCH}"
+          )
+          for URL in "${CANDIDATES[@]}"; do
+            echo "Trying shfmt from: $URL"
+            if curl -fsSL -o /tmp/shfmt "$URL"; then
+              break
+            fi
+          done
+          test -s /tmp/shfmt
+          sudo install -m 0755 /tmp/shfmt /usr/local/bin/shfmt
           shfmt --version
 
       - name: Set up Python
