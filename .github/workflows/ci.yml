@@ -26,16 +26,18 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.x'
+
       - name: Install shfmt (pinned)
         shell: bash
         run: |
           set -euo pipefail
-          SHFMT_VERSION=v3.8.1
-          ARCH=linux_amd64
-          URL="https://github.com/mvdan/sh/releases/download/${SHFMT_VERSION}/shfmt_${SHFMT_VERSION#v}_${ARCH}"
-          echo "Downloading shfmt from $URL"
-          curl -fsSL -o /tmp/shfmt "$URL"
-          sudo install -m 0755 /tmp/shfmt /usr/local/bin/shfmt
+          echo "$HOME/go/bin" >> "$GITHUB_PATH"
+          go install mvdan.cc/sh/v3/cmd/shfmt@v3.8.1
+          shfmt --version
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -49,12 +51,12 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install black
 
-      - name: Apply formatting (repo script)
+      - name: Apply formatting first
         shell: bash
         run: |
           set -euo pipefail
-          chmod +x ./dev_scripts/format.sh
-          ./dev_scripts/format.sh
+          find . -name "*.sh" -not -path "*/node_modules/*" -print0 | xargs -0 shfmt -w -i 4 -ci
+          python -m black .
 
       - name: Auto-commit formatting changes (PRs from same repo)
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false }}
@@ -122,32 +124,40 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install flake8
 
-      - name: Run repo lint
+      - name: Run ShellCheck
         shell: bash
         run: |
           set -euo pipefail
-          chmod +x ./dev_scripts/lint.sh
-          ./dev_scripts/lint.sh
+          find . -name "*.sh" -not -path "*/node_modules/*" -print0 |
+            xargs -0 shellcheck --severity=error -e SC1091,SC2155
+
+      - name: Run flake8
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m flake8 . --exclude=node_modules,venv,.venv,.git,__pycache__ --max-line-length=120
 
   format-check:
     name: Format Check
     runs-on: ubuntu-latest
-    needs: [lint]
+    needs: [apply-format]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22.x'
+
       - name: Install shfmt (pinned)
         shell: bash
         run: |
           set -euo pipefail
-          SHFMT_VERSION=v3.8.1
-          ARCH=linux_amd64
-          URL="https://github.com/mvdan/sh/releases/download/${SHFMT_VERSION}/shfmt_${SHFMT_VERSION#v}_${ARCH}"
-          echo "Downloading shfmt from $URL"
-          curl -fsSL -o /tmp/shfmt "$URL"
-          sudo install -m 0755 /tmp/shfmt /usr/local/bin/shfmt
+          echo "$HOME/go/bin" >> "$GITHUB_PATH"
+          go install mvdan.cc/sh/v3/cmd/shfmt@v3.8.1
+          shfmt --version
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -181,7 +191,7 @@ jobs:
   text-check:
     name: Text Check
     runs-on: ubuntu-latest
-    needs: [format-check]
+    needs: [apply-format]
 
     steps:
       - name: Checkout
@@ -202,7 +212,7 @@ jobs:
   test-dry-run:
     name: Test (macOS dry-run)
     runs-on: macos-latest
-    needs: [text-check]
+    needs: [lint, format-check, text-check]
 
     steps:
       - name: Checkout
@@ -226,7 +236,7 @@ jobs:
   test-suite:
     name: Test (macOS full suite)
     runs-on: macos-latest
-    needs: [test-dry-run]
+    needs: [lint, format-check, text-check]
 
     steps:
       - name: Checkout
