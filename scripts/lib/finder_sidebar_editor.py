@@ -147,7 +147,12 @@ class FinderSidebar:
         while attempt <= retries:
             try:
                 self._debug(
-                    f"_retry_cmd attempt", attempt + 1, "of", retries + 1, "->", cmd
+                    "_retry_cmd attempt",
+                    attempt + 1,
+                    "of",
+                    retries + 1,
+                    "->",
+                    cmd,
                 )
             except Exception:
                 pass
@@ -177,8 +182,8 @@ class FinderSidebar:
         if not self._allow_pyobjc:
             return False
         try:
-            import LaunchServices  # type: ignore
-            import Foundation  # type: ignore
+            import LaunchServices  # type: ignore # noqa: F401
+            import Foundation  # type: ignore # noqa: F401
 
             return True
         except Exception:
@@ -349,7 +354,6 @@ end tell
                         LSSharedFileListCopySnapshot,  # type: ignore
                         LSSharedFileListItemCopyResolvedURL,  # type: ignore
                     )
-                    from Foundation import NSURL  # type: ignore
 
                     shared = LSSharedFileListCreate(
                         None, kLSSharedFileListFavorites, None
