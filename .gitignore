@@ -10,3 +10,4 @@ logs/
 node_modules/
 docs/ALIASES_FUNCTIONS_CONFLICTS_REPORT.md
 /dev_scripts/__pycache__
+/.tools
